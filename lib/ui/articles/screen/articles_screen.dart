@@ -4,7 +4,9 @@ import 'package:news_c17/core/remote/api/api_manager.dart';
 import 'package:news_c17/core/resources/app_constants.dart';
 import 'package:news_c17/core/resources/colors_manager.dart';
 import 'package:news_c17/model/category_model.dart';
+import 'package:news_c17/ui/articles/screen/sources_view_model.dart';
 import 'package:news_c17/ui/articles/widget/articles_list.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/sources_response/Source.dart';
 
@@ -24,7 +26,63 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return ChangeNotifierProvider(
+        create: (context) => SourcesViewModel()..getSources(widget.category.id),
+        child: Consumer<SourcesViewModel>(
+            builder: (context, viewModel, child) {
+              if(viewModel.isLoading){
+                // loading logic widget
+                return Center(child: CircularProgressIndicator(),);
+              }else if(viewModel.errorMessage!=null){
+                // error logic widget
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(viewModel.errorMessage??"",style: Theme.of(context).textTheme.headlineMedium,),
+                      ElevatedButton(onPressed: () {
+                          viewModel.getSources(widget.category.id);
+                      }, child: Text("Try Again"))
+                    ],
+                  ),
+                );
+              }
+              // success logic widget
+              List<Source> sources = viewModel.sourcesList??[];
+              return DefaultTabController(
+                length: sources.length,
+                child: Column(
+                  children: [
+                    TabBar(
+                        labelStyle: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w700,
+                            color: ColorsManager.lightPrimaryColor
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: ColorsManager.lightPrimaryColor
+                        ),
+                        dividerHeight: 0,
+                        tabAlignment: TabAlignment.start,
+                        isScrollable: true,
+                        tabs: sources.map((source) =>Tab(
+                          text: source.name,
+                        ) ,).toList()
+                    ),
+                    Expanded(child: TabBarView(
+                        children: sources.map((source) => ArticlesList(source.id??""),).toList()
+                    ))
+                  ],
+                ),
+              );
+            },
+        ),
+    )
+
+      /*FutureBuilder(
       future: ApiManager.getSources(widget.category.id),
       builder: (context, asyncSnapshot) {
         if(asyncSnapshot.connectionState == ConnectionState.waiting){
@@ -75,7 +133,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
           ),
         );
       }
-    );
+    )*/;
   }
 }
 
