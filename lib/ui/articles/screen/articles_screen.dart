@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_c17/core/DI/di.dart';
 import 'package:news_c17/core/remote/api/api_manager.dart';
 import 'package:news_c17/core/resources/app_constants.dart';
 import 'package:news_c17/core/resources/colors_manager.dart';
-import 'package:news_c17/model/category_model.dart';
+import 'package:news_c17/data/datasource_impl/sources_dao_impl/sources_api_dao_impl.dart';
+import 'package:news_c17/data/repository_impl/sources_repo_impl.dart';
 import 'package:news_c17/ui/articles/screen/sources_states.dart';
 import 'package:news_c17/ui/articles/screen/sources_view_model.dart';
 import 'package:news_c17/ui/articles/widget/articles_list.dart';
 
-import '../../../model/sources_response/Source.dart';
+import '../../../data/model/category_model.dart';
+import '../../../data/model/sources_response/Source.dart';
 
 class ArticlesScreen extends StatefulWidget {
   CategoryModel category;
@@ -28,7 +31,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => SourcesViewModel()..getSources(widget.category.id),
+        create: (context) => getIt.get<SourcesViewModel>()..getSources(widget.category.id),
         child: BlocBuilder<SourcesViewModel,SourcesStates>(
             builder: (context, state) {
               switch(state){

@@ -1,4 +1,5 @@
-import 'package:news_c17/model/articles_response/Article.dart';
+
+import '../../../data/model/articles_response/Article.dart';
 
 sealed class ArticlesStates {}
 

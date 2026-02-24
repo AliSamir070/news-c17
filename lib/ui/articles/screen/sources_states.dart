@@ -1,4 +1,5 @@
-import 'package:news_c17/model/sources_response/Source.dart';
+
+import '../../../data/model/sources_response/Source.dart';
 
 sealed class SourcesStates{}
 

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:news_c17/core/DI/di.dart';
 import 'package:news_c17/core/remote/api/api_manager.dart';
 import 'package:news_c17/ui/articles/widget/article_item.dart';
 import 'package:news_c17/ui/articles/widget/articles_states.dart';
 import 'package:news_c17/ui/articles/widget/articles_view_model.dart';
 
-import '../../../model/articles_response/Article.dart';
+import '../../../data/model/articles_response/Article.dart';
 
 class ArticlesList extends StatelessWidget {
   String sourceId;
@@ -15,7 +16,7 @@ class ArticlesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => ArticlesViewModel()..getArticles(sourceId),
+        create: (context) => getIt.get<ArticlesViewModel>()..getArticles(sourceId),
         child: BlocBuilder<ArticlesViewModel,ArticlesStates>(
             builder: (context, state) {
               switch(state){

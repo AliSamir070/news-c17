@@ -1,5 +1,8 @@
-import 'Source.dart';
+import 'package:hive_ce/hive.dart';
 
+import 'Source.dart';
+part 'Sources_response.g.dart';
+@HiveType(typeId: 0,adapterName: "SourcesResponseAdapter")
 class SourcesResponse {
   SourcesResponse({
       this.status, 
@@ -18,9 +21,13 @@ class SourcesResponse {
     code = json['code'];
     message = json['message'];
   }
+  @HiveField(0)
   String? status;
+  @HiveField(1)
   List<Source>? sources;
+  @HiveField(2)
   String? code;
+  @HiveField(3)
   String? message;
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
