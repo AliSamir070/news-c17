@@ -8,6 +8,7 @@ import 'package:news_c17/core/resources/app_theme.dart';
 import 'package:news_c17/core/resources/routes_manager.dart';
 import 'package:news_c17/data/model/sources_response/Source.dart';
 import 'package:news_c17/data/model/sources_response/Sources_response.dart';
+import 'package:news_c17/hive_registrar.g.dart';
 import 'package:news_c17/ui/home/screen/home_screen.dart';
 
 void main() async{
@@ -15,8 +16,7 @@ void main() async{
   ApiManager.init();
   configureDependencies();
   await Hive.initFlutter();
-  Hive.registerAdapter(SourcesResponseAdapter());
-  Hive.registerAdapter(SourceAdapter());
+  Hive.registerAdapters();
   runApp(const MyApp());
 }
 
